@@ -12,16 +12,16 @@ class UserProfileManager(BaseUserManager):
         if not email:
             raise ValueError('user must have a email address')
 
-        email=self.normalize_email(email)
+        email=self.normalize_email(email)#create all letter to small non case sessitive
         user=self.model(email=email,name=name)
 
-        user.set_password(password)
-        user.save(using=self._db)
+        user.set_password(password) #for hashing
+        user.save(using=self._db) #used self._db not not usefull here but its for practice if we wor on multiple DBs use the name of db to save in
 
         return user
 
     def create_superuser(self,email,name,password):
-        '''create and save super uswr with given detail'''
+        '''create and save super user with given detail'''
         user=self.create_user(email,name,password)
 
         user.is_superuser=True
@@ -35,6 +35,7 @@ class UserProfileManager(BaseUserManager):
 
 
 #user profile
+# overwriting the User model of Django
 class UserProfile(AbstractBaseUser,PermissionsMixin):
     ''' DATAbase model for users in the system'''
     email=models.EmailField(max_length=255,unique=True)
@@ -48,7 +49,7 @@ class UserProfile(AbstractBaseUser,PermissionsMixin):
     REQUIRED_FIELDS=['name']
 
     def get_full_name(self):
-        '''returive full name of user'''
+        '''retrive full name of user'''
         return self.name
 
     def get_short_name(self):

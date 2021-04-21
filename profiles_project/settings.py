@@ -123,5 +123,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-# added costoe use model
+# added costom user model
 AUTH_USER_MODEL='profiles_api.UserProfile'
