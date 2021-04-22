@@ -2,6 +2,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 
+'''
+APIviews vs Viewsets:
+
+APIViews:
+--API views are used when we need complex logic like (calling   other APIs or working with other files)
+-- define fucntion for HTTPS
+-- full control over logic
+'''
 class HelloApiView(APIView):
     '''TEST API VIEW'''
 
@@ -14,4 +22,5 @@ class HelloApiView(APIView):
         'is Mapped mannually to URLs',
         ]
 
+        # can return list or dict in JSON
         return Response({'message':'hello','an_apiview':an_apiview})
