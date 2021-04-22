@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status,viewsets
 
 from profiles_api import serializers
 
@@ -9,9 +9,20 @@ APIviews vs Viewsets:
 
 APIViews:
 --API views are used when we need complex logic like (calling   other APIs or working with other files)
--- define fucntion for HTTPS
+-- define fucntion for HTTPS (get,put,post,delete,patch)
 -- full control over logic
+
+
+ViewSets:
+-- uses common api object oprations (list,create,retireve,update,partial update,deletobkect)
+-- database intrface fastest
+--for standard database oprations
+--CRUD 
+--simple API
 '''
+
+
+#APIView
 class HelloApiView(APIView):
     '''TEST API VIEW'''
     
@@ -62,3 +73,50 @@ class HelloApiView(APIView):
         
         
         
+# Viewse
+class HelloVeiwSet(viewsets.ViewSet):
+    """TEST API VEIWSETS"""
+    serializer_class=serializers.HelloSerializer
+    
+    def list(self,request):
+        """return hello message"""
+        
+        a_viewset=[
+            "uses common api object oprations (list,create,retireve,update,partial update,deletobkect)",
+            "Automatically maps Urls, using Routers",
+            "provides more functionality with less code",
+        ]
+        
+        return Response({"message":"Hello","a_viewset":a_viewset})
+    
+    def create(self,request):
+        """create new create message"""
+        serializer=self.serializer_class(data=request.data)
+        
+        if serializer.is_valid():
+            name=serializer.validated_data.get("name")
+            message=f"hello {name} bhai"
+            
+            return Response({"message": message})
+        else:
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+            
+    def retrieve(self,request,pk=None):
+        """Handle getting object by ID"""
+        return Response({"http_veiwset_method":"get(retrieve)"})
+    
+    def update(self,request,pk=None):
+        """Handle updating object by ID"""
+        return Response({"http_veiwset_method":"put(update)"})
+    
+    def partial_update(self,request,pk=None):
+        """Handle updating partially object by ID"""
+        return Response({"http_veiwset_method":"patch(partial update)"})
+    
+    
+    def destroy(self,request,pk=None):
+        """Handle delete object by ID"""
+        return Response({"http_veiwset_method":"delete(destroy)"})
