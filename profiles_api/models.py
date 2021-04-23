@@ -1,6 +1,8 @@
 from django.db import models
 # to override defoult administration
 from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin,BaseUserManager
+# importing settings from project folder
+from django.conf import settings
 
 
 # Create your models here.
@@ -59,3 +61,19 @@ class UserProfile(AbstractBaseUser,PermissionsMixin):
     def __str__(self):
         '''return string representation of user'''
         return self.email
+
+
+# feed item model 
+class ProfileFeedItem(models.Model):
+    """Profie status Update : this model save the update status wheneever we create or update a user profile"""
+    user_profile=models.ForeignKey(
+        settings.AUTH_USER_MODEL, #we could directly use UserProfile (Hardcoding) but if in future we have to change usermodel we have to change name here as well thats why we are taking usermodel from setting whichever we put in current use in this case its UserProfile itself
+        on_delete=models.CASCADE,
+        )
+    
+    status_text=models.CharField(max_length=255)
+    created_on=models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        """returns the string representation"""
+        return self.status_text

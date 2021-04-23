@@ -6,6 +6,7 @@ from rest_framework.authentication import TokenAuthentication
 from profiles_api import permissions
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
+from rest_framework.permissions import IsAuthenticated
 
 '''
 APIviews vs Viewsets:
@@ -143,3 +144,21 @@ class UserLoginApiView(ObtainAuthToken):
     """Handle creating user authentications tokens"""
     # added the class to enable ObtainAuthToken manualy
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+    
+    
+    
+#  class for feed   
+class UserProfileFeedViewSet(viewsets.ModelViewSet):
+    """Handle creating ,reading and updating feed"""
+    authentication_classes = (TokenAuthentication,)
+    serializer_class = serializers.ProfileFeedItemSerializer
+    queryset = models.ProfileFeedItem.objects.all()
+    permission_classes = (
+        permissions.UpdateOwnStatus,
+        IsAuthenticated,
+        )
+    
+    
+    def perform_create(self,serializer):
+        """set the user profile to logged in user"""
+        serializer.save(user_profile=self.request.user)
